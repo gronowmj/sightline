@@ -10,11 +10,11 @@
 
   // ---------- levels ----------
   var LEVELS = {
-    1: { name: 'Level 1', desc: 'Car or truck. Sign close to the centre, nothing else on screen.', radius: 45, pair: 'easy', distract: [0, 0], busy: false, unlock: 200 },
-    2: { name: 'Level 2', desc: 'Car or truck. The sign can appear further out.', radius: 66, pair: 'easy', distract: [0, 0], busy: false, unlock: 180 },
-    3: { name: 'Level 3', desc: 'Wider field with 8–12 look-alike signs around the ring.', radius: 66, pair: 'easy', distract: [8, 12], busy: false, unlock: 200 },
-    4: { name: 'Level 4', desc: 'Two cars that differ only in roof shape, plus 10–14 look-alike signs.', radius: 66, pair: 'roof', distract: [10, 14], busy: false, unlock: 220 },
-    5: { name: 'Level 5', desc: 'Widest field, 16 look-alike signs, busy background, vans that differ in wheel count.', radius: 82, pair: 'wheels', distract: [16, 16], busy: true, unlock: null }
+    1: { name: 'Level 1', desc: 'Car or truck. The diamond appears close to the centre, nothing else on screen.', radius: 45, pair: 'easy', distract: [0, 0], busy: false, unlock: 200 },
+    2: { name: 'Level 2', desc: 'Car or truck. The diamond can appear further out.', radius: 66, pair: 'easy', distract: [0, 0], busy: false, unlock: 180 },
+    3: { name: 'Level 3', desc: 'Look-alike signs appear. Find the diamond among 8–12 decoys.', radius: 66, pair: 'easy', distract: [8, 12], busy: false, unlock: 200 },
+    4: { name: 'Level 4', desc: 'Two cars that differ only in roof shape. Find the diamond among 10–14 look-alike signs.', radius: 66, pair: 'roof', distract: [10, 14], busy: false, unlock: 220 },
+    5: { name: 'Level 5', desc: 'Widest field and a busy background. Find the diamond among 16 look-alike signs; vans differ in wheel count.', radius: 82, pair: 'wheels', distract: [16, 16], busy: true, unlock: null }
   };
 
   // ---------- art (original, drawn in code) ----------
@@ -58,6 +58,7 @@
     octa: '<path d="M-3.8 -9 L3.8 -9 L9 -3.8 L9 3.8 L3.8 9 L-3.8 9 L-9 3.8 L-9 -3.8 Z" fill="' + SY + '" stroke="' + SK + '" stroke-width="2"/><circle r="2.6" fill="' + SK + '"/>',
     invtri: '<path d="M0 10 L10 -8 L-10 -8 Z" fill="' + SY + '" stroke="' + SK + '" stroke-width="2" stroke-linejoin="round"/><circle cx="0" cy="-2" r="2.6" fill="' + SK + '"/>'
   };
+  function signSVG(k, pad) { pad = pad || 12; return '<svg viewBox="' + (-pad) + ' ' + (-pad) + ' ' + 2 * pad + ' ' + 2 * pad + '" xmlns="http://www.w3.org/2000/svg">' + SIGNS[k] + '</svg>'; }
   var DISTRACT_KINDS = ['tri', 'square', 'circle', 'octa', 'invtri'];
 
   var ICON_SVG = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#1f5fbf"/>' +
@@ -124,6 +125,7 @@
   var cur = 'home';
   function show(name) { Object.keys(screens).forEach(function (k) { screens[k].classList.toggle('active', k === name); }); cur = name; window.scrollTo(0, 0); }
   document.querySelector('.logo').innerHTML = ICON_SVG;
+  document.querySelector('.locicon').innerHTML = signSVG('target', 11);
   document.querySelectorAll('.flame').forEach(function (e) { e.innerHTML = FLAME; });
   function renderMute() { document.querySelectorAll('.mute').forEach(function (b) { b.innerHTML = data.muted ? SPK_OFF : SPK_ON; b.setAttribute('aria-pressed', data.muted ? 'true' : 'false'); }); }
   function toggleMute() { data.muted = !data.muted; save(); renderMute(); }
@@ -192,6 +194,7 @@
     var p = PAIRS[game.L.pair];
     document.querySelectorAll('.vbtn').forEach(function (b, i) { b.innerHTML = vehicleSVG(p[i]); b.setAttribute('aria-label', p[i]); });
     show('play'); layout(); setBar();
+    $('tc-sign').innerHTML = signSVG('target'); $('tc-lure').classList.toggle('hidden', !(lvl >= 3 && lvl <= 5));
     $('ready').classList.remove('hidden'); hideAll();
     $('msread').textContent = Math.round(game.stair.ms) + ' ms';
   }

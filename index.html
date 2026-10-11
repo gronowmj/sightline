@@ -41,8 +41,8 @@
     </div>
     <details class="how">
       <summary>How to play</summary>
-      <p>Look at the dot in the middle. A vehicle appears in the centre and a yellow diamond sign appears somewhere on the ring, then a pattern hides them.</p>
-      <p>First choose which vehicle you saw, then tap where the diamond was. Get both right and the flash gets shorter; miss and it gets longer.</p>
+      <p>Look at the dot in the middle. A vehicle appears in the centre and a yellow diamond sign appears somewhere on the ring, then a pattern hides them. The diamond is always your target.</p>
+      <p>First choose which vehicle you saw, then tap where the diamond was. From level 3, look-alike signs (triangles, squares, circles, octagons) appear too; ignore them and find the diamond. Get both right and the flash gets shorter; miss and it gets longer.</p>
       <p>Keys: Space/Enter to start, ←/→ or A/D for the vehicle, 1–8 (clockwise from the top), arrow keys or the numpad for the position, M to mute.</p>
     </details>
     <p class="note">Inspired by useful-field-of-view training used in research; not medical advice.</p>
@@ -68,10 +68,14 @@
           </div>
         </div>
         <div id="resp-loc" class="hidden"></div>
-        <p id="locprompt" class="prompt hidden">Where was the sign?</p>
+        <p id="locprompt" class="prompt hidden"><span class="locicon" aria-hidden="true"></span>Where was the diamond?</p>
         <div id="fb" class="fb hidden"></div>
-        <div id="ready" class="ready">
-          <p>Keep your eyes on the centre dot.</p>
+        <div id="ready" class="ready" role="dialog" aria-labelledby="tc-title">
+          <p class="tc-k" id="tc-title">Your target</p>
+          <div class="tc-sign" id="tc-sign" aria-label="Yellow diamond sign" role="img"></div>
+          <p class="tc-main">Find this diamond. Ignore the other signs.</p>
+          <p class="tc-lure hidden" id="tc-lure">Look-alike signs will try to distract you.</p>
+          <p class="tc-tip">Keep your eyes on the centre dot.</p>
           <button id="go" class="primary">Start</button>
         </div>
       </div>

@@ -78,3 +78,11 @@ h2{text-align:center;font-size:28px;margin:8px 0}
   .progress .bar{width:100%!important;height:var(--p,0%)}
   #locprompt{top:10px;transform:none;padding:0}
 }
+.ready p{margin:0}
+.tc-k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);font-weight:600}
+.tc-sign{width:min(30vmin,120px);height:min(30vmin,120px)}
+.tc-sign svg,.locicon svg{width:100%;height:100%;display:block}
+.tc-main{font-size:19px;font-weight:600}
+.tc-lure{font-size:16px}
+.tc-tip{font-size:14px;color:var(--soft)}
+.locicon{display:block;width:26px;height:26px;margin:0 auto 4px}
