@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f4f1ea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sightline">
+<meta name="description" content="A quick visual speed and attention exercise.">
+<title>Sightline</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <section id="home" class="screen active">
+    <header class="top">
+      <div></div>
+      <button class="iconbtn mute" aria-label="Sound on/off"></button>
+    </header>
+    <div class="hero">
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Sightline</h1>
+      <p class="tag">A quick visual speed and attention exercise</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="k">Level</span><span class="v" id="h-level">1</span></div>
+      <div class="stat"><span class="k">Best</span><span class="v" id="h-best">–</span></div>
+      <div class="stat"><span class="k">Streak</span><span class="v" id="h-streak"><span class="flame"></span><b>0</b></span></div>
+    </div>
+    <div class="levels" id="levels" role="group" aria-label="Choose level"></div>
+    <p class="leveldesc" id="leveldesc"></p>
+    <button id="play" class="primary">Play</button>
+    <div class="chartwrap">
+      <div class="charthead">Your times (last 30 sessions, lower is faster)</div>
+      <div id="chart"></div>
+    </div>
+    <details class="how">
+      <summary>How to play</summary>
+      <p>Look at the dot in the middle. A vehicle appears in the centre and a yellow diamond sign appears somewhere on the ring, then a pattern hides them.</p>
+      <p>First choose which vehicle you saw, then tap where the diamond was. Get both right and the flash gets shorter; miss and it gets longer.</p>
+      <p>Keys: Space/Enter to start, ←/→ or A/D for the vehicle, 1–8 (clockwise from the top), arrow keys or the numpad for the position, M to mute.</p>
+    </details>
+    <p class="note">Inspired by useful-field-of-view training used in research; not medical advice.</p>
+  </section>
+
+  <section id="play-screen" class="screen">
+    <header class="playbar">
+      <button class="iconbtn" id="quit" aria-label="Back to home">✕</button>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <span class="msread" id="msread">500 ms</span>
+      <button class="iconbtn mute" aria-label="Sound on/off"></button>
+    </header>
+    <div id="stage-wrap">
+      <div id="stage">
+        <svg id="stim" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
+        <canvas id="mask"></canvas>
+        <div id="fix" class="fix"></div>
+        <div id="resp-vehicle" class="resp hidden">
+          <p class="prompt">Which vehicle was in the centre?</p>
+          <div class="vbtns">
+            <button class="vbtn" data-v="0" aria-label="Vehicle 1"></button>
+            <button class="vbtn" data-v="1" aria-label="Vehicle 2"></button>
+          </div>
+        </div>
+        <div id="resp-loc" class="hidden"></div>
+        <p id="locprompt" class="prompt hidden">Where was the sign?</p>
+        <div id="fb" class="fb hidden"></div>
+        <div id="ready" class="ready">
+          <p>Keep your eyes on the centre dot.</p>
+          <button id="go" class="primary">Start</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="screen">
+    <header class="top"><div></div><button class="iconbtn mute" aria-label="Sound on/off"></button></header>
+    <h2>Session complete</h2>
+    <div class="big"><span id="r-ms">–</span><small>ms</small></div>
+    <p class="sub">Your display time threshold</p>
+    <p id="r-best" class="badge hidden">New best!</p>
+    <p id="r-unlock" class="badge unlock hidden"></p>
+    <div class="stats">
+      <div class="stat"><span class="k">Accuracy</span><span class="v" id="r-acc">–</span></div>
+      <div class="stat"><span class="k">Level</span><span class="v" id="r-level">–</span></div>
+      <div class="stat"><span class="k">Streak</span><span class="v" id="r-streak"><span class="flame"></span><b>0</b></span></div>
+    </div>
+    <button id="again" class="primary">Play again</button>
+    <button id="home-btn" class="secondary">Home</button>
+  </section>
+</div>
+<script src="threshold.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
