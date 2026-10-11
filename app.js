@@ -10,11 +10,11 @@
 
   // ---------- levels ----------
   var LEVELS = {
-    1: { name: 'Level 1', desc: 'Car or truck. The diamond appears close to the centre, nothing else on screen.', radius: 45, pair: 'easy', distract: [0, 0], busy: false, unlock: 200 },
-    2: { name: 'Level 2', desc: 'Car or truck. The diamond can appear further out.', radius: 66, pair: 'easy', distract: [0, 0], busy: false, unlock: 180 },
-    3: { name: 'Level 3', desc: 'Look-alike signs appear. Find the diamond among 8–12 decoys.', radius: 66, pair: 'easy', distract: [8, 12], busy: false, unlock: 200 },
-    4: { name: 'Level 4', desc: 'Two cars that differ only in roof shape. Find the diamond among 10–14 look-alike signs.', radius: 66, pair: 'roof', distract: [10, 14], busy: false, unlock: 220 },
-    5: { name: 'Level 5', desc: 'Widest field and a busy background. Find the diamond among 16 look-alike signs; vans differ in wheel count.', radius: 82, pair: 'wheels', distract: [16, 16], busy: true, unlock: null }
+    1: { name: 'Level 1', desc: 'Car or truck. The diamond appears close to the centre, nothing else on screen.', radius: 45, pair: 'easy', distract: [0, 0], busy: false, unlock: 200, start: 500 },
+    2: { name: 'Level 2', desc: 'Car or truck. The diamond can appear further out.', radius: 66, pair: 'easy', distract: [0, 0], busy: false, unlock: 180, start: 500 },
+    3: { name: 'Level 3', desc: 'A few look-alike signs appear, building up as you go. Find the diamond.', radius: 66, pair: 'easy', distract: [4, 4], ramp: { every: 4, max: 8 }, kinds: ['tri', 'circle', 'octa', 'invtri'], busy: false, unlock: 300, start: 650 },
+    4: { name: 'Level 4', desc: 'Two cars that differ only in roof shape. Find the diamond among 10–14 look-alike signs.', radius: 66, pair: 'roof', distract: [10, 14], busy: false, unlock: 300, start: 650 },
+    5: { name: 'Level 5', desc: 'Widest field and a busy background. Find the diamond among 16 look-alike signs; vans differ in wheel count.', radius: 82, pair: 'wheels', distract: [16, 16], busy: true, unlock: null, start: 700 }
   };
 
   // ---------- art (original, drawn in code) ----------
@@ -190,7 +190,7 @@
 
   function startSession() {
     var lvl = data.level;
-    game = { level: lvl, L: LEVELS[lvl], stair: S.newStair(S.START_MS), n: 0, correct: 0, phase: 'ready', trial: null, log: [] };
+    game = { level: lvl, L: LEVELS[lvl], stair: S.newStair(LEVELS[lvl].start || S.START_MS), n: 0, correct: 0, phase: 'ready', trial: null, log: [] };
     var p = PAIRS[game.L.pair];
     document.querySelectorAll('.vbtn').forEach(function (b, i) { b.innerHTML = vehicleSVG(p[i]); b.setAttribute('aria-label', p[i]); });
     show('play'); layout(); setBar();
@@ -217,14 +217,18 @@
         else s += '<line x1="' + x + '" y1="' + y + '" x2="' + (x + rand(30) - 15) + '" y2="' + (y + rand(30) - 15) + '" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>';
       }
     }
-    var nd = L.distract[0] + rand(L.distract[1] - L.distract[0] + 1), spots = [];
+    var nd = L.ramp ? Math.min(L.ramp.max, L.distract[0] + Math.floor(game.n / L.ramp.every))
+                    : L.distract[0] + rand(L.distract[1] - L.distract[0] + 1), spots = [];
+    var kinds = L.kinds || DISTRACT_KINDS; t.kinds = [];
+    function pick() { var k = kinds[rand(kinds.length)]; t.kinds.push(k); return k; }
     if (nd > 0) {
       for (var j = 0; j < 8; j++) if (j !== t.pos) spots.push(posXY(j, L.radius));
+      if (nd < 7) { shuffle(spots); spots = spots.slice(0, nd); }
       var extra = [];
       for (var m = 0; m < 8; m++) extra.push(posXY(m + 0.5, L.radius));
       if (L.busy) for (var q = 0; q < 8; q++) extra.push(posXY(q + 0.5, L.radius * 0.6));
       shuffle(extra); spots = spots.concat(extra.slice(0, Math.max(0, nd - 7)));
-      spots.forEach(function (xy) { s += '<g transform="translate(' + xy[0].toFixed(1) + ' ' + xy[1].toFixed(1) + ')">' + SIGNS[DISTRACT_KINDS[rand(DISTRACT_KINDS.length)]] + '</g>'; });
+      spots.forEach(function (xy) { s += '<g transform="translate(' + xy[0].toFixed(1) + ' ' + xy[1].toFixed(1) + ')">' + SIGNS[pick()] + '</g>'; });
     }
     var txy = posXY(t.pos, L.radius);
     s += '<g transform="translate(' + txy[0].toFixed(1) + ' ' + txy[1].toFixed(1) + ')">' + SIGNS.target + '</g>';
